@@ -1,6 +1,7 @@
 package com.crud.tasks.trello.client;
 
 import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.domain.TrelloCardDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,10 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class TrelloClient {
@@ -26,19 +24,37 @@ public class TrelloClient {
     @Value("${trello.app.username}")
     private String trelloUserName;
 
+    //public List<TrelloBoardDto> getTrelloBoards() {
+      //       final TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildURIForGetBoards(), TrelloBoardDto[].class);
+        //return Optional.ofNullable(boardsResponse)
+        //        .map(Arrays::asList)
+        //        .orElseGet(Collections::emptyList);
+   // }
+
     public List<TrelloBoardDto> getTrelloBoards() {
-             final TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildURIForGetBoards(), TrelloBoardDto[].class);
-        return Optional.ofNullable(boardsResponse)
-                .map(Arrays::asList)
-                .orElseGet(Collections::emptyList);
-    }
-    private URI buildURIForGetBoards() {
-        return UriComponentsBuilder.fromHttpUrl(String.format("%s/members/%s/boards", trelloApiEndpoint, trelloUserName))
+
+        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/kodillauser/boards")
                 .queryParam("key", trelloAppKey)
                 .queryParam("token", trelloAppToken)
                 .queryParam("fields", "name,id")
-                             .queryParam("lists", "all")
-                            .build().encode().toUri();
-           }
+                .queryParam("lists", "all").build().encode().toUri();
+
+        TrelloBoardDto[] boardResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
+
+        if (boardResponse != null) {
+            return Arrays.asList(boardResponse);
+        }
+        return new ArrayList<>();
+    }
+    private URI buildURIForGetBoards() {    //przerobic aby uzywalo trello config np zamiast trelloAppKey bedzie trelloConfig.getTrelloAppKey()
+        return UriComponentsBuilder.fromHttpUrl(String.format("%s/members/%s/boards", trelloApiEndpoint, trelloUserName))
+
+
+                .queryParam("key", trelloAppKey)
+                .queryParam("token", trelloAppToken)
+                .queryParam("fields", "name,id")
+                .queryParam("lists", "all")
+                .queryParam("lists", "all").build().encode().toUri();
+    }
 
 }
