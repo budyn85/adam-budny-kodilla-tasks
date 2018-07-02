@@ -32,7 +32,7 @@ public class TrelloController {
 //        }
     // GET request
 
-    @RequestMapping(method = RequestMethod.GET, value = "getTrelloboards")
+    @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
     public void getTrelloBoards() {
     List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
 
