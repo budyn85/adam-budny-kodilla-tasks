@@ -15,13 +15,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.*;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 import static java.util.Optional.ofNullable;
 
 @Component
 public class TrelloClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
+
     @Autowired
     private TrelloConfig trelloConfig;
 
