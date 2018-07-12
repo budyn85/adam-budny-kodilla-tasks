@@ -23,14 +23,15 @@ public class EmailScheduler {
 
     @Scheduled(cron = "0 0 10 * * *")
     private void sendInformationEmail() {
-        String wordCondition;
+        //String wordCondition;
         long size = taskRepository.count();
 
-        if(size==1){
-            wordCondition= "task";
-        }else{
-            wordCondition= "tasks";
-        }
+//        if(size==1){
+//            wordCondition= "task";
+//        }else{
+//            wordCondition= "tasks";
+//        }
+         String wordCondition = size==1 ? "task": "tasks";
          simpleEmailService.send(new Mail(
                  adminConfig.getAdminMail(),
                  SUBJECT,
