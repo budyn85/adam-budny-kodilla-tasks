@@ -1,9 +1,6 @@
 package com.crud.tasks.mapper;
 
-import com.crud.tasks.domain.TrelloBoard;
-import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.domain.TrelloList;
-import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -20,7 +17,7 @@ public class TrelloMapper {
                 .collect(toList());
     }
 
-    public  List<TrelloBoardDto> mapToBoardsDto(final List<TrelloBoard> trelloBoards){
+    public  List<TrelloBoardDto> mapToBoardDto(final List<TrelloBoard> trelloBoards){
         return  trelloBoards.stream()
                 .map(trelloBoard ->
                         new  TrelloBoardDto(trelloBoard.getId(),trelloBoard.getName(),mapToListDto(trelloBoard.getLists()))
@@ -36,5 +33,14 @@ public class TrelloMapper {
         return trelloLists.stream()
                 .map(trelloList -> new TrelloListDto(trelloList.getId(),trelloList.getName(), trelloList.isClosed()))
                 .collect(toList());
+    }
+    public TrelloCardDto mapToCardDto(final TrelloCard trelloCard){
+        return new TrelloCardDto(trelloCard.getName(),trelloCard.getDescription(),
+                trelloCard.getPos(),trelloCard.getListId());
+    }
+
+    public TrelloCard mapToCard(final TrelloCardDto trelloCardDto){
+        return new TrelloCard(trelloCardDto.getName(),trelloCardDto.getDescription(),
+                trelloCardDto.getPos(),trelloCardDto.getListId());
     }
 }

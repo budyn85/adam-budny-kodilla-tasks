@@ -12,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class TrelloFacade {
@@ -32,7 +30,7 @@ public class TrelloFacade {
     public List<TrelloBoardDto> fetchTrelloBoards() {
         List<TrelloBoard> trelloBoards = trelloMapper.mapToBoards(trelloService.fetchTrelloBoards());
         List<TrelloBoard> filteredBoards = trelloValidator.validateTrelloBoards(trelloBoards);
-        return trelloMapper.mapToBoardsDto(filteredBoards);
+        return trelloMapper.mapToBoardDto(filteredBoards);
     }
 
     public CreatedTrelloCardDto createCard(final TrelloCardDto trelloCardDto){
