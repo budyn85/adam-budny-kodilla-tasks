@@ -17,7 +17,7 @@ public class TrelloController {
     @Autowired
     private TrelloService trelloService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getTrelloBoards")
+    @RequestMapping(method = RequestMethod.GET, value = "/getTrelloBoards")   //jeszcze raz zrobic facade
     public List<TrelloBoardDto> getTrelloBoards() {
         return trelloService.fetchTrelloBoards();
     }

@@ -45,8 +45,8 @@ public class TrelloClientTest {
         TrelloBoardDto[] trelloBoards = new TrelloBoardDto[1];
         trelloBoards[0] = new TrelloBoardDto("test_id", "test_board", new ArrayList<>());
 
-        URI uri = new URI("http://test.com/members/adambudny/boards?key=test&token=test&fields=name,id&lists=all");
-
+        URI uri = new URI("http://test.com/members/kodillauser/boards?key=test&token=test&fields=name,id&lists=all");
+        System.out.println(uri);
         when(restTemplate.getForObject(uri,TrelloBoardDto[].class)).thenReturn(trelloBoards);
         //When
         List<TrelloBoardDto> fetchedTrelloBoards = trelloClient.getTrelloBoards();
@@ -66,6 +66,7 @@ public class TrelloClientTest {
                 "test_id"
         );
         final URI uri = new URI("http://test.com/cards?key=test&token=test&name=Test%20task&desc=Test%20Description&pos=top&idList=test_id");
+        System.out.println(uri);
         final CreatedTrelloCardDto createdTrelloCard = new CreatedTrelloCardDto(
                 "1",
                 "Test task",
@@ -76,7 +77,7 @@ public class TrelloClientTest {
         final CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
         // Then
         assertEquals("1",newCard.getId());
-        assertEquals("Test_task", newCard.getName());
+        assertEquals("Test task", newCard.getName());
         assertEquals("http://test.com",newCard.getShortUrl());
 
         }

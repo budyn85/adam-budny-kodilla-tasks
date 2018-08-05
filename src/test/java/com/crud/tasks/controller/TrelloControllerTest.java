@@ -36,7 +36,7 @@ public class TrelloControllerTest {
 
     @MockBean
     private TrelloFacade trelloFacade;  //udostepnia mocka dla kontekstu Springa
-
+    
     @Test
     public void getTrelloBoards() {
     }
