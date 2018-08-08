@@ -10,4 +10,7 @@ public class Mail {
     private String subject;
     private String message;
     private String toCc;
+
+    public Mail(String adminMail, String subject, String s) {
+    }
 }

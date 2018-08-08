@@ -22,22 +22,59 @@ public class SimpleEmailService {
     @Autowired
     private MailCreatorService mailCreatorService;
 
-    public void send(final Mail mail) {
+    public void send( Mail mail, MailType mailType) {
         LOGGER.info("Starting email preparation...");
         try {
-            javaMailSender.send(createMimeMessage(mail));
+            if (mailType.equals(MailType.DAILYDATAUPDATE)) {
+                javaMailSender.send(createMimeMessage(mail, MailType.DAILYDATAUPDATE));
+            } else {
+                javaMailSender.send(createMimeMessage(mail, MailType.STANDARD));
+            }
             LOGGER.info("Email has been sent");
-        } catch (MailException e) {
+        }catch(MailException e) {
             LOGGER.error("Failed to process email sending: ", e.getMessage(), e);
         }
     }
-    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+    private MimeMessagePreparator createMimeMessage(final Mail mail, final MailType mailType) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("adam.kodilla@gmail.com");
+            messageHelper.setFrom(" adam.kodilla@gmail.com");
             messageHelper.setTo(mail.getMailTo());
             messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+
+            switch (mailType) {
+                case STANDARD:
+                    messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+                    break;
+                case DAILYDATAUPDATE:
+                    messageHelper.setText(mailCreatorService.buildDailyMail(mail.getMessage()), true);
+                    break;
+            }
         };
     }
+    private MimeMessagePreparator createDailyDataUpdate(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setFrom(" adam.kodilla@gmail.com");
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+        };
+    }
+
+//    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+//        return mimeMessage -> {
+//            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+//            messageHelper.setFrom("adam.kodilla@gmail.com");
+//            messageHelper.setTo(mail.getMailTo());
+//            messageHelper.setSubject(mail.getSubject());
+//            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+//        };
+    private SimpleMailMessage createMailMessage(final Mail mail) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(mail.getMailTo());
+        mailMessage.setSubject(mail.getSubject());
+        mailMessage.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()));
+        return mailMessage;
+    }
 }
+
